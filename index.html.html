@@ -2,11 +2,10 @@
 <html lang="es-AR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#14532d">
 <title>Visión Agropecuaria — Descargas de granos</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>">
-<meta http-equiv="refresh" content="0;url=https://powygqcmgzqxfwdzfybu.supabase.co/functions/v1/app">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#127806;</text></svg>">
 <style>
   html,body{height:100%;margin:0}
   body{display:flex;align-items:center;justify-content:center;background:#f1f5f0;color:#14201a;
@@ -21,18 +20,32 @@
 </style>
 </head>
 <body>
-  <div>
+  <div id="cargando">
     <div class="lg">&#127806;</div>
     <h1>Visión Agropecuaria</h1>
-    <p>Abriendo el sistema de descargas…</p>
-    <div class="sp"></div>
-    <p style="margin-top:18px">
-      Si no abre solo,
-      <a href="https://powygqcmgzqxfwdzfybu.supabase.co/functions/v1/app">tocá acá</a>.
-    </p>
+    <p id="msg">Cargando el sistema de descargas…</p>
+    <div class="sp" id="sp"></div>
   </div>
 <script>
-  location.replace("https://powygqcmgzqxfwdzfybu.supabase.co/functions/v1/app");
+(async function () {
+  var APP = "https://powygqcmgzqxfwdzfybu.supabase.co/functions/v1/app";
+  try {
+    var r = await fetch(APP + "?v=" + Date.now(), { cache: "no-store" });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    var html = new TextDecoder("utf-8").decode(await r.arrayBuffer());
+    if (html.indexOf("<") === -1) throw new Error("respuesta vacía");
+    document.open();
+    document.write(html);
+    document.close();
+  } catch (e) {
+    var sp = document.getElementById("sp");
+    if (sp) sp.style.display = "none";
+    document.getElementById("msg").innerHTML =
+      "No se pudo cargar la app (" + e.message + ").<br><br>" +
+      "Probá de nuevo en un minuto, o abrila directo desde " +
+      "<a href='" + APP + "'>este link</a>.";
+  }
+})();
 </script>
 </body>
 </html>
